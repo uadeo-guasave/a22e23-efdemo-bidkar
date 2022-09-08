@@ -4,7 +4,7 @@ namespace EFDemo.Models
 {
     class SqliteDbContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
+        public DbSet<User>? Users { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=Db/demo.db");
