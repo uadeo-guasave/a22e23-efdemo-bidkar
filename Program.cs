@@ -2,65 +2,96 @@
 // Console.WriteLine("Hello, World!");
 using EFDemo.Models;
 
-// InitializeDatabase();
-// CRUD Create Read Update Delete
-
-GetUsers();
-static void GetUsers()
+internal partial class Program
 {
-    using (var db = new SqliteDbContext())
+    static void Main(string[] args)
     {
-        var users = db.Users!.ToList();
-        foreach (var u in users)
+        // InitializeDatabase();
+        // CrearUsuario();
+        GetUsers();
+        // https://localhost/api/User/2
+        User usuario = GetUserById(2);
+        System.Console.WriteLine(usuario.AllName);
+        UserLogin("name", "pwd");
+    }
+
+    private static void UserLogin(string name, string password)
+    {
+        // Realiza el código para validar un inicio de sesión
+        // a partir del usuario y la contraseña dada
+        throw new NotImplementedException();
+    }
+
+    private static User GetUserById(int id)
+    {
+        using (var db = new SqliteDbContext())
         {
-            System.Console.WriteLine($"Usuario:{u.Name} Email:{u.Email}");
+            var user = db.Users!.Find(id);
+            return user;
         }
+    }
+
+
+
+    // CRUD Create Read Update Delete
+    static void GetUsers()
+    {
+        using (var db = new SqliteDbContext())
+        {
+            var users = db.Users!.ToList();
+            foreach (var u in users)
+            {
+                System.Console.WriteLine($"Usuario:{u.Name} Email:{u.Email}");
+            }
+        }
+    }
+
+
+    static User SaveNewUser(User user)
+    {
+        using (var db = new SqliteDbContext())
+        {
+            db.Database.EnsureCreated();
+            db.Users!.Add(user);
+            db.SaveChanges();
+            return user;
+        };
+    }
+
+    static void InitializeDatabase()
+    {
+        var usuario = new User()
+        {
+            Id = 1,
+            Name = "bidkar",
+            Password = "123456",
+            Firstname = "Bidkar",
+            Lastname = "Aragón Cárdenas",
+            Email = "bidkar.aragon@uadeo.mx"
+        };
+
+        // Crear conexión y tablas
+        // var db = new SqliteDbContext();
+        using (var db = new SqliteDbContext())
+        {
+            db.Database.EnsureCreated();
+            db.Users!.Add(usuario);
+            db.SaveChanges();
+        };
+    }
+
+    static void CrearUsuario()
+    {
+        var user = SaveNewUser(new User
+        {
+            Name = "maria",
+            Password = "123456",
+            Firstname = "Maria",
+            Lastname = "Victoria",
+            Email = "maria@victoria.mx"
+        });
+        System.Console.WriteLine($"User:{user.Name} Id:{user.Id}");
     }
 }
 
-// CrearUsuario();
-static User SaveNewUser(User user)
-{
-    using (var db = new SqliteDbContext())
-    {
-        db.Database.EnsureCreated();
-        db.Users!.Add(user);
-        db.SaveChanges();
-        return user;
-    };
-}
 
-static void InitializeDatabase()
-{
-    var usuario = new User()
-    {
-        Id = 1,
-        Name = "bidkar",
-        Password = "123456",
-        Firstname = "Bidkar",
-        Lastname = "Aragón Cárdenas",
-        Email = "bidkar.aragon@uadeo.mx"
-    };
-
-    // Crear conexión y tablas
-    // var db = new SqliteDbContext();
-    using (var db = new SqliteDbContext())
-    {
-        db.Database.EnsureCreated();
-        db.Users!.Add(usuario);
-        db.SaveChanges();
-    };
-}
-
-static void CrearUsuario()
-{
-    var user = SaveNewUser(new User
-    {
-        Name = "maria",
-        Password = "123456",
-        Firstname = "Maria",
-        Lastname = "Victoria",
-        Email = "maria@victoria.mx"
-    });
-    System.Console.WriteLine($"User:{user.Name} Id:{user.Id}");
-}

@@ -24,5 +24,8 @@ namespace EFDemo.Models
         public string Email { get; set; } = ""!;
 
         public string? RememberToken { get; set; }
+
+        [NotMapped]
+        public string AllName { get => ($"{Firstname} {Lastname}"); }
     }
 }
