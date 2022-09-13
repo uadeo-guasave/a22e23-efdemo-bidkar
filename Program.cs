@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 // Console.WriteLine("Hello, World!");
 using EFDemo.Models;
+using System.Linq;
 
 internal partial class Program
 {
@@ -8,18 +9,70 @@ internal partial class Program
     {
         // InitializeDatabase();
         // CrearUsuario();
-        GetUsers();
+        // GetUsers();
         // https://localhost/api/User/2
-        User usuario = GetUserById(2);
-        System.Console.WriteLine(usuario.AllName);
-        UserLogin("name", "pwd");
+        // User usuario = GetUserById(2);
+        // System.Console.WriteLine(usuario.AllName);
+        UserLogin("bidkar", "12345"); // incorrecta
+        ChangePassword(1, "123"); // cambiar password a usuario bidkar
+        UserLogin("bidkar", "123"); // correcta
+        DeleteUser(2);
+    }
+
+    private static void DeleteUser(int id)
+    {
+        using (var db = new SqliteDbContext())
+        {
+            var user = GetUserById(id);
+            if (user is null)
+            {
+                System.Console.WriteLine("Usuario no existente");
+            }
+            else
+            {
+                db.Remove(user);
+                db.SaveChanges();
+                System.Console.WriteLine("Usuario eliminado correctamente");
+            }
+        }
+    }
+
+    private static void ChangePassword(int id, string newPassword)
+    {
+        var user = GetUserById(id);
+        if (user is null)
+        {
+            System.Console.WriteLine($"No se encuentra un usuario con id {id}");
+        }
+        else
+        {
+            using (var db = new SqliteDbContext())
+            {
+                user.Password = newPassword;
+                db.Update(user);
+                db.SaveChanges();
+            }
+        }
     }
 
     private static void UserLogin(string name, string password)
     {
         // Realiza el código para validar un inicio de sesión
         // a partir del usuario y la contraseña dada
-        throw new NotImplementedException();
+        using (var db = new SqliteDbContext())
+        {
+            var user = db.Users!
+                         .Where(u => u.Name == name && u.Password == password)
+                         .FirstOrDefault();
+            if (user is not null)
+            {
+                System.Console.WriteLine($"Login correcto para {user.AllName}");
+            }
+            else
+            {
+                System.Console.WriteLine("Login incorrecto");
+            }
+        }
     }
 
     private static User GetUserById(int id)
