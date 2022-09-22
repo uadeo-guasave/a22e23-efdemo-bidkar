@@ -7,16 +7,28 @@ internal partial class Program
 {
     static void Main(string[] args)
     {
+        using (var db = new SqliteDbContext())
+        {
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
+        }
         // InitializeDatabase();
         // CrearUsuario();
         // GetUsers();
         // https://localhost/api/User/2
-        // User usuario = GetUserById(2);
-        // System.Console.WriteLine(usuario.AllName);
-        UserLogin("bidkar", "12345"); // incorrecta
-        ChangePassword(1, "123"); // cambiar password a usuario bidkar
-        UserLogin("bidkar", "123"); // correcta
-        DeleteUser(2);
+        // User usuario = GetUserById(1);
+        // if (usuario is not null)
+        // {
+        //     System.Console.WriteLine(usuario.AllName);
+        // }
+        // else
+        // {
+        //     System.Console.WriteLine("Usuario no encontrado");
+        // }
+        // UserLogin("bidkar", "12345"); // incorrecta
+        // ChangePassword(1, "123"); // cambiar password a usuario bidkar
+        // UserLogin("bidkar", "123"); // correcta
+        // DeleteUser(2);
     }
 
     private static void DeleteUser(int id)

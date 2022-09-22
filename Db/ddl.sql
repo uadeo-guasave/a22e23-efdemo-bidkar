@@ -8,3 +8,19 @@ CREATE TABLE Users (
     Email VARCHAR(200) NOT NULL UNIQUE,
     RememberToken VARCHAR(255) DEFAULT NULL
 );
+
+CREATE TABLE Profiles (
+    Id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    Avatar VARCHAR(255),
+    PublicEmail VARCHAR(200),
+    Facebook VARCHAR(50),
+    Twitter VARCHAR(50),
+    Linkedin VARCHAR(50),
+    Description VARCHAR(255),
+    UserId INTEGER NOT NULL,
+    CONSTRAINT fk_users_profiles
+        FOREIGN KEY (UserId)
+        REFERENCES Users (Id)
+            ON UPDATE CASCADE
+            ON DELETE RESTRICT
+);

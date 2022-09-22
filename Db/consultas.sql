@@ -27,3 +27,7 @@ update Users set
 where
     Id = ?
 ;
+
+select * from Profiles;
+
+PRAGMA table_info('Profiles');

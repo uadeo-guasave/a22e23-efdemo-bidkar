@@ -7,10 +7,10 @@ namespace EFDemo.Models
     class User
     {
         public int Id { get; set; }
-        
+
         [Required, MaxLength(20)]
         public string Name { get; set; } = ""!;
-        
+
         [Required]
         public string Password { get; set; } = ""!;
 
@@ -27,5 +27,8 @@ namespace EFDemo.Models
 
         [NotMapped]
         public string AllName { get => ($"{Firstname} {Lastname}"); }
+
+        [NotMapped]
+        public Profile Profile { get; set; }
     }
 }
